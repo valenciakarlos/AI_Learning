@@ -1,5 +1,7 @@
 from google import genai
 import os
+import io
+from IPython.display import Markdown, clear_output
 
 from google.genai import types
 
@@ -14,10 +16,20 @@ if not api_key:
 #print("Using Key:"+api_key)
 
 client = genai.Client(api_key=api_key)
-
-response = client.models.generate_content(
-    model="gemini-2.0-flash",
-    contents="How large is the universe?",
+response = client.models.generate_content_stream(
+    model='gemini-2.0-flash-thinking-exp',
+    contents='Who was the youngest author listed on the transformers NLP paper?',
 )
 
-print(response.text)
+buf = io.StringIO()
+for chunk in response:
+    buf.write(chunk.text)
+    # Display the response as it is streamed
+    print(chunk.text, end='')
+
+
+# This is generating an error at the end but anyways
+
+# And then render the finished response as formatted markdown.
+#clear_output()
+#print(buf.getvalue())

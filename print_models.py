@@ -1,7 +1,7 @@
 from google import genai
 import os
-
 from google.genai import types
+from pprint import pprint
 
 # Replace with your actual Gemini API key or get it from an environment variable
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -15,9 +15,12 @@ if not api_key:
 
 client = genai.Client(api_key=api_key)
 
-response = client.models.generate_content(
-    model="gemini-2.0-flash",
-    contents="How large is the universe?",
-)
 
-print(response.text)
+# Print existing models
+print("These are the existing models you can use")
+for model in client.models.list():
+  print("-"*25)
+  print(model.name)
+  pprint(model.to_json_dict())
+  print("-"*25)
+
